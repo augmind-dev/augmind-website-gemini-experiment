@@ -4,7 +4,7 @@ Three white cards in a row, stacking on phones. Each has its number in the `step
 
 The gradient on the numbers is the one place a fade is used on a light ground. Its weakest point is 5.3:1, which is enough for text this large and not for body text [S1].
 
-You provide: nothing; the three steps are fixed. Wording changes need a partner.
+You provide: nothing; the three steps are fixed. Wording changes need the owner's decision.
 
 Don't: add a fourth step; reorder them; promise a result in the "You get:" line.
 

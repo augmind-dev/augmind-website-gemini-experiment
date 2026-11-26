@@ -1,4 +1,4 @@
-# Brief for Gemini: make the AugMind website better
+# Start here: make the AugMind website better
 
 **Your job:** design a better AugMind website than the one live today, with your own design system. You have full creative control of the look. Prove it is better with the same checks the live site passes.
 

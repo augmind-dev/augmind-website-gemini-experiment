@@ -3,7 +3,7 @@ import { defineConfig, envField } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
 
-// Pages that send noindex stay out of the sitemap. (/healthcare was removed from this list on 23 Nov 2026, after Saima's sign-off.)
+// Pages that send noindex stay out of the sitemap. (/healthcare was removed from this list on 23 Nov 2026.)
 const NOINDEX = new Set(['/404']);
 
 export default defineConfig({
