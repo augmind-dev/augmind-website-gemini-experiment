@@ -2,7 +2,7 @@
 
 # AugMind website: experiment copy
 
-Coding agents: read `AGENTS.md` first, then `DESIGN-SYSTEM.md`.
+Coding agents: read `BRIEF.md` first, then `AGENTS.md` and `DESIGN-SYSTEM.md`.
 
 The augmind.ai site: Astro 7, static pages plus one on-demand page (`/scheduling`) and one server Action (the consultation form), hosted on Vercel with `@astrojs/vercel`.
 

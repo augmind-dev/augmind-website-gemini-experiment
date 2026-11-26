@@ -8,6 +8,7 @@ This repository is an **experiment copy** of the AugMind website. It is a sandbo
 
 ## Read these first
 
+0. `BRIEF.md`: what you are being asked to do, and how it will be judged.
 1. `DESIGN-SYSTEM.md`: every colour, type style, spacing step and component, in one file.
 2. `design-system/README.md`: the full brand book, including how the site writes.
 3. `src/styles/site.css`: all styles, with every value as a CSS variable.
@@ -32,6 +33,7 @@ Layout, visual design, motion, components and page structure. Be bold; that is t
 
 - Stack: Astro with the Vercel adapter, Node 22.12 or later.
 - `npm install`, then `npm run dev` (http://localhost:4321). `npm run build` runs the type check and the build; it must finish with 0 errors before you push.
+- Before every push that changes what visitors see, run the checks in `tools/checks/README.md`. They are the same checks the live site passes.
 - If you change a token or a component, update `design-system/` and `DESIGN-SYSTEM.md` to match.
 - Keep a short log of what you changed and why in `EXPERIMENT-LOG.md` at the repository root, newest first. Say what you checked and what you did not check.
 

@@ -1,0 +1,16 @@
+{
+  "name": "augmind-experiment-checks",
+  "private": true,
+  "description": "Accessibility, contrast, layout and keyboard checks for the experiment site. Not part of the site build.",
+  "scripts": {
+    "serve": "node serve.cjs ../../dist/client 8812",
+    "scan": "node scan.cjs",
+    "keys": "node keys.cjs",
+    "summary": "node summarise.cjs"
+  },
+  "devDependencies": {
+    "axe-core": "4.10.3",
+    "pngjs": "7.0.0",
+    "playwright": "1.63.0"
+  }
+}
