@@ -1,0 +1,67 @@
+---
+/**
+ * Shell for every page (v11.2, 22 Nov 2026): head, header, the inked SVG filters, footer and the phone sticky CTA.
+ * Daylight only: no theme switch and no cookie notice, and the site stores nothing in the browser.
+ * The head script marks the page `js` (so motion can wait for script) and `intro` before the first paint: the hero
+ * intro plays when the visitor arrives from outside the site (not on clicks between our own pages), and never
+ * under reduced motion. All styles are in src/styles/site.css; behaviour is in src/scripts/site.js.
+ *
+ * Indexing: robots is "noindex, nofollow" unless VERCEL_ENV is "production", and always on pages passed `noindex`.
+ */
+import '../styles/site.css';
+import { VERCEL_ENV } from 'astro:env/server';
+import { SITE, type NavKey } from '../data/site';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import StickyCta from '../components/StickyCta.astro';
+import InkDefs from '../components/InkDefs.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Path for the canonical URL, without the leading slash ('' for the homepage). */
+  canon: string;
+  cur?: NavKey;
+  noindex?: boolean;
+  /** Where the phone sticky CTA points; omit for no sticky CTA. */
+  sticky?: string;
+  /** JSON-LD object for this page. */
+  ld?: object;
+}
+const { title, description, canon, cur, noindex = false, sticky, ld } = Astro.props;
+// Experiment copy: never indexable, so it cannot compete with the real site in search.
+const robots = 'noindex, nofollow';
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{title}</title>
+<meta name="description" content={description}>
+{robots && <meta name="robots" content={robots}>}
+{canon !== '404' && <link rel="canonical" href={`${SITE}/${canon}`}>}
+<meta name="theme-color" content="#FFFFFF">
+<meta property="og:title" content={title}><meta property="og:description" content={description}><meta property="og:type" content="website">
+<meta property="og:site_name" content="AugMind"><meta property="og:locale" content="en_US">
+{canon !== '404' && <meta property="og:url" content={`${SITE}/${canon}`}>}<meta property="og:image" content={`${SITE}/og-image.png`}>
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="AugMind: Know what your ad spend really earns.">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content={title}><meta name="twitter:description" content={description}><meta name="twitter:image" content={`${SITE}/og-image.png`}>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/assets/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/schibsted-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script is:inline>(function(h){h.classList.add('js');try{var r=document.referrer;if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&!(r&&new URL(r).origin===location.origin))h.classList.add('intro')}catch(e){}})(document.documentElement)</script>
+{ld && <script type="application/ld+json" set:html={JSON.stringify(ld).replace(/</g, '\\u003c')} />}
+</head>
+<body>
+<Header cur={cur} />
+<InkDefs />
+<main id="main">
+<slot />
+</main>
+<Footer />
+{sticky && <StickyCta href={sticky} />}
+<script>import '../scripts/site.js';</script>
+</body>
+</html>

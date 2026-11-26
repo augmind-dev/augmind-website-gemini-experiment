@@ -1,0 +1,7 @@
+---
+/** Partner cutout over a tinted circle: img 273×258 at left -52.5px over a 168px circle (see .pt in site.css). */
+import type { Partner } from '../data/site';
+interface Props { p: Partner; alt?: string }
+const { p, alt = '' } = Astro.props;
+---
+<div class={`pt pt-${p.c}`}><img src={`/team/${p.img}.webp`} width="273" height="258" alt={alt} loading="lazy" decoding="async"></div>

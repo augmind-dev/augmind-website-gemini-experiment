@@ -1,0 +1,34 @@
+---
+/**
+ * AI search (GEO) block: copy, the springy Levarum credit, and the example AI answer (fictional businesses).
+ * Motion (site.js): the question is sent, the assistant types, three businesses pop in, then the miss lands.
+ * Levarum is a product of The IT Associates, LLC: a tool AugMind uses that clients subscribe to (Tait, 22 Nov 2026).
+ * It is credited once, here, with Tait's ownership stated beside it (partners' decision, 23 Nov 2026; wording to be checked by
+ * the attorney). Never call it a partner or a partnership.
+ */
+import { I } from '../lib/icons';
+const dots: [string, string][] = [['0deg', '#7d7ddc'], ['60deg', '#f4cc4e'], ['120deg', '#f5853b'], ['180deg', '#8fc9d2'], ['240deg', '#f4a89c'], ['300deg', '#3f8fc0']];
+const shortlist = [['Northwind & Co.', 'Named and linked'], ['Keystone Group', 'Named and linked'], ['Bluebird Partners', 'Named']];
+---
+<div class="ai" id="ai-search">
+  <div class="ai-t">
+    <p class="kick">AI search (GEO)</p>
+    <h2>Right now, AI is recommending someone. Is it you?</h2>
+    <p>Buyers now ask AI assistants for a shortlist. Generative engine optimization means getting named in those answers. We test the prompts your buyers use, several times each, and show where you drop out.</p>
+    <button class="link" type="button" data-open="five-gates">See the 5 gates where businesses drop out →</button>
+    <a class="link" href="/ai-search">How AI search decides who to name →</a>
+    <p class="credit"><span>AI search measured with</span><span class="lc"><span class="lev" data-lev-spring><img class="on-light" src="/assets/levarum-lockup-small.svg?v=2" width="157" height="34" alt="Levarum" draggable="false"><img class="on-dark" src="/assets/levarum-lockup-small-inverse.svg" width="157" height="34" alt="Levarum" draggable="false"></span><span class="lc-fx" aria-hidden="true"><b></b>{dots.map(([a, c]) => <i style={`--a:${a};--c:${c}`}></i>)}</span></span><span class="credit-by">Levarum is made by The IT Associates, LLC, which AugMind partner Tait Goodwin owns.</span></p>
+  </div>
+  <figure class="chat" aria-label="Example AI assistant answer with fictional businesses">
+    <figcaption class="chat-h"><b>Example AI assistant answer</b><span>Fictional businesses</span></figcaption>
+    <div class="chat-b">
+      <p class="q">Who are the best commercial HVAC contractors near me?</p>
+      <span class="typing" aria-hidden="true"><i></i><i></i><i></i></span>
+      <p class="a">Three well-reviewed options buyers mention most:</p>
+      <ol class="short">
+        {shortlist.map(([b, s], i) => <li style={`--i:${i}`}><span class="r">{i + 1}</span><div><b>{b}</b><span>{s}</span></div></li>)}
+      </ol>
+      <p class="miss"><Fragment set:html={I.xc} />Your business isn’t named or linked</p>
+    </div>
+  </figure>
+</div>

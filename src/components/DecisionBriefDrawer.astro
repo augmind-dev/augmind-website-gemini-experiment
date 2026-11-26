@@ -1,0 +1,48 @@
+---
+/**
+ * Sample Decision Brief (illustrative, fictional company, example figures). Opens from "See a sample Decision Brief".
+ * The "email me the PDF" form is hidden until a real PDF and an automatic email exist (owner, 22 Nov 2026).
+ * Verdict and causes are reconciled: $2,900 of the $4,100 quarterly social budget; 139 = 83 + 56.
+ */
+import { I } from '../lib/icons';
+---
+<dialog class="dw" id="sample-brief" aria-labelledby="brief-t">
+<div class="dw-in">
+  <div class="dw-h"><p>Sample Decision Brief</p><button class="x" type="button" data-close aria-label="Close sample Decision Brief"><Fragment set:html={I.x} /></button></div>
+  <div class="dw-b">
+    <article class="memo">
+      <header class="memo-top">
+        <div class="lk"><img src="/assets/augmind-logo-ink.svg" width="127" height="30" alt="AugMind"><span class="stamp">Sample · fictional company · example figures</span></div>
+        <h2 id="brief-t" tabindex="-1" autofocus>Decision Brief</h2>
+        <dl><dt>Prepared for</dt><dd>Example Service Group (fictional)</dd>
+            <dt>Window</dt><dd>90-day audit window</dd>
+            <dt>Prepared by</dt><dd>AugMind partners</dd></dl>
+      </header>
+      <section><h3><span class="sn">1</span>Executive verdict</h3>
+        <p class="verdict">Move $2,900 of the $4,100 quarterly social budget out of broad social retargeting. Keep Search and Local Map spend intact.</p>
+        <p>In this sample, broad retargeting produced none of the 9 social sales that could be confirmed. The $1,200 in social prospecting that did produce sales stays, under the holdout test in section 3.</p>
+      </section>
+      <section><h3><span class="sn">2</span>Key reconciliation finding</h3>
+        <p>Meta reported 148 leads. 139 of them did not match an invoice within 90 days. Two causes account for all 139:</p>
+        <div class="tbl" tabindex="0" role="region" aria-label="Reconciliation table, scrolls sideways on small screens"><table>
+          <caption class="sr">Why 139 of 148 Meta-claimed leads failed invoice matching</caption>
+          <thead><tr><th scope="col">Cause</th><th scope="col" class="num">Leads</th><th scope="col">How we found it</th></tr></thead>
+          <tbody>
+            <tr><td>Duplicate form reloads</td><td class="num">83</td><td>Same person, same form, within minutes</td></tr>
+            <tr><td>Out-of-territory inquiries</td><td class="num">56</td><td>ZIP code outside the six service zones</td></tr>
+            <tr><td>Total not matched</td><td class="num">139</td><td>of 148 Meta-claimed leads</td></tr>
+          </tbody></table></div>
+      </section>
+      <section><h3><span class="sn">3</span>Recommended 4-week holdout and plumbing fix</h3>
+        <ol>
+          <li><b>Offline conversion feed.</b> Send closed sales from the CRM back to Google and Meta, so both optimize toward paying customers, not form fills.</li>
+          <li><b>Geographic holdout.</b> Pause social retargeting in 2 of 6 service zones for 4 weeks and compare closed sales against the other 4.</li>
+          <li><b>AI crawler access.</b> Unblock <code>OAI-SearchBot</code> in <code>robots.txt</code> and the web application firewall, so ChatGPT search can read the service pages.</li>
+        </ol>
+      </section>
+      <p class="src">Every figure in a real Brief links to its source row in your ad platform export or sales records. This sample is illustrative.</p>
+    </article>
+    <div class="dw-cta"><p>Want a Brief like this for your own accounts?</p><a class="btn btn-p" href="/#consult" data-close>Request a consultation</a></div>
+  </div>
+</div>
+</dialog>

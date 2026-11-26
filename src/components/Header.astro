@@ -1,0 +1,33 @@
+---
+import { NAV, type NavKey } from '../data/site';
+interface Props { cur?: NavKey }
+const { cur } = Astro.props;
+// Pages with their own form (home, /ai-search, /scheduling) scroll to it; the others go to the home page form.
+const path = Astro.url.pathname.replace(/\/$/, '');
+const cta = cur === 'hc' ? '#hc-consult' : ['', '/ai-search', '/scheduling'].includes(path) ? '#consult' : '/#consult';
+---
+<a class="skip" href="#main">Skip to content</a>
+<header class="hd"><div class="w hd-in">
+  <a class="brand" href="/" aria-label="AugMind home"><img class="logo" src="/assets/augmind-logo-ink.svg" width="136" height="32" alt="AugMind"></a>
+  <button class="nav-btn" type="button" aria-expanded="false" aria-controls="site-nav">
+    <svg class="ic-m" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    <svg class="ic-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    <span class="nav-btn-t">Menu</span>
+  </button>
+  <nav class="nav" id="site-nav" aria-label="Main">{NAV.map(([t, h, k]) => <a href={h} aria-current={k === cur ? 'page' : undefined}>{t}</a>)}</nav>
+  <a class="btn btn-p hd-cta" href={cta}>Request a consultation</a>
+</div></header>
+<!-- Phone menu: a disclosure. Inline so it works even if the main script fails; until it runs the links stay in a row. -->
+<script is:inline>(function (d) {
+  var hd = d.querySelector('.hd'), btn = hd && hd.querySelector('.nav-btn'); if (!btn) return;
+  var word = btn.querySelector('.nav-btn-t');
+  function set(open) { hd.classList.toggle('is-open', open); btn.setAttribute('aria-expanded', String(open)); word.textContent = open ? 'Close' : 'Menu'; }
+  hd.classList.add('has-menu');
+  btn.addEventListener('click', function () { set(btn.getAttribute('aria-expanded') !== 'true'); });
+  d.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape' || !hd.classList.contains('is-open')) return;
+    var inside = hd.contains(d.activeElement); set(false); if (inside) btn.focus();
+  });
+  hd.querySelector('.nav').addEventListener('click', function (e) { if (e.target.closest('a')) set(false); });
+  matchMedia('(min-width: 721px)').addEventListener('change', function (e) { if (e.matches) set(false); });
+})(document);</script>

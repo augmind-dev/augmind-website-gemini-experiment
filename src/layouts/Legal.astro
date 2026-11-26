@@ -1,0 +1,10 @@
+---
+/** Privacy policy and terms of use: Markdown pages in src/pages, rendered in the v11 prose column. */
+import Base from './Base.astro';
+interface Props { frontmatter: { title: string; description: string } }
+const { title, description } = Astro.props.frontmatter;
+const canon = Astro.url.pathname.replace(/^\/|\.html$|\/$/g, '');
+---
+<Base title={title} description={description} canon={canon}>
+<div class="w"><article class="prose legal"><slot /></article></div>
+</Base>

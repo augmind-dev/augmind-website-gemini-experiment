@@ -1,0 +1,117 @@
+/* AugMind dark gradient look (preview branch only). Loaded after site.css: swaps the tokens, then restyles the white cards.
+   Text on the dark ground is 7:1 or better; every bar and status keeps a number or a word, so colour is never the only signal. */
+:root {
+  color-scheme: dark;
+  --paper: #0D0F18;
+  --slate: #12151F;
+  --mint: #0F1A1E;
+  --navy: #11152A;
+  --navy-2: #1A2040;
+  --ink: #F3F5FB;
+  --ink2: #C9D0E4;
+  --ink3: #B7BFD6;
+  --rule: #2A2E42;
+  --rule-strong: #4C5473;
+  --accent: #5FE0C2;
+  --accent-ink: #7EEBCF;
+  --accent-soft: rgba(95,224,194,.13);
+  --cta-bg: #F3F5FB;
+  --cta-hover: #FFFFFF;
+  --blue-ink: #A5B6FF;
+  --no: #FF9A9A;
+  --focus: #FFFFFF;
+  --grad-a: #7EEBCF;
+  --grad-b: #8FA6FF;
+  --chart-a: #8FA6FF;
+  --chart-b: #7EEBCF;
+  --lift: 0 1px 0 rgba(255,255,255,.05) inset, 0 14px 34px -14px rgba(0,0,0,.6);
+  --surface: #181B2B;
+  --surface-2: #1F2336;
+  --fade-top: rgba(143,166,255,.55);
+  --fade-none: rgba(143,166,255,0);
+}
+body { background: var(--paper); color: var(--ink); }
+.btn-p { background: var(--cta-bg); color: #0D0F18; }
+.btn-p:hover { background: var(--cta-hover); color: #0D0F18; }
+.btn-w { background: rgba(190,196,220,.2); color: var(--ink); border: 1px solid rgba(255,255,255,.22); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+.btn-w:hover { background: rgba(190,196,220,.3); }
+.hd { background: rgba(13,15,24,.92); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+.hero { background: linear-gradient(180deg, #151A3A 0%, var(--navy) 55%, var(--paper) 100%); }
+.hero .ledger, .hero .safe { color: var(--ink); border-color: var(--rule); }
+
+/* Cards */
+.ledger, .sort, .chat, .step, .fcard, .gate, .safe, .flow li, .cmp, .g5 li, .lev li, .tcard, .memo, .gcard, .x, .again {
+  background: var(--surface); color: var(--ink); border-color: var(--rule); }
+.lg-bar, .chat-h, .gcard figcaption { background: var(--surface-2); border-color: var(--rule); color: var(--ink2); }
+.gcard figcaption b { color: var(--ink); }
+.lg-bar .ex { background: var(--surface); border-color: var(--rule-strong); color: var(--ink2); }
+.lg-btn:hover { background: var(--surface-2); }
+.lg-geo { background: var(--surface-2); border-color: var(--rule-strong); }
+.q { background: var(--surface-2); }
+.short .r, .qa summary .pm { background: var(--surface-2); }
+.agree { background: var(--surface); }
+.flow li.bad { background: #2A1A22; border-color: #6B3340; }
+.gstamp { background: var(--surface); }
+.hc-by img, .faces img { background: var(--surface-2); }
+.faces img { border-color: var(--slate); }
+input, select, textarea { background: var(--surface); color: var(--ink); border-color: var(--rule-strong); }
+.mail input { border-color: var(--rule-strong); }
+
+/* Tags: a word and an icon, tinted */
+.tag-scale { background: rgba(95,224,194,.14); color: #7EEBCF; }
+.tag-audit { background: rgba(255,154,154,.14); color: #FFB3B3; }
+.tag-keep { background: rgba(165,182,255,.14); color: #B9C6FF; }
+.out-ok { background: rgba(95,224,194,.14); color: #7EEBCF; }
+.out-rev { background: rgba(165,182,255,.14); color: #B9C6FF; }
+.out-no { background: rgba(255,154,154,.14); color: #FFB3B3; }
+.miss { background: rgba(255,154,154,.12); color: #FFB3B3; }
+
+/* The fading-gradient look: a bright top line that fades into the card */
+.lg-track { background: transparent; border-bottom: 1px solid var(--rule-strong); border-radius: 3px; height: 16px; }
+.lg-fill { background: linear-gradient(to bottom, var(--fade-top), var(--fade-none)); border-top: 2px solid #8FA6FF; border-radius: 3px 3px 0 0; }
+.lg-cap .sw { background: linear-gradient(to bottom, var(--fade-top), var(--fade-none)); border-top: 2px solid #8FA6FF; }
+.lg-cap .sw.claim { border-color: var(--ink3); border-style: dashed; background: none; }
+.gcard .gdots i { border-color: var(--rule-strong); }
+.gcard .gdots i.on { background: var(--accent); border-color: var(--accent); }
+.gcard .gdots i.linked { background: #8FA6FF; border-color: #8FA6FF; }
+.gcard { box-shadow: 0 24px 60px -20px rgba(0,0,0,.7); }
+
+/* Images with a baked-in dark ink wordmark need the light version on dark: the header and footer already use the right file. */
+.hd img, .nav img { filter: none; }
+.on-light { display: none !important; }
+.on-dark { display: revert !important; }
+
+/* Found in the 24 Nov consistency check: surfaces that were still light */
+.stk { background: rgba(13,15,24,.9); border-top: 1px solid var(--rule); }
+dialog.dw { background: var(--paper); }
+dialog.dw::backdrop { background: rgba(0,0,0,.6); }
+.dw-h { background: rgba(17,21,42,.96); border-color: var(--rule); }
+.dw-h p { color: var(--ink2); }
+.tbl th { background: var(--surface-2); color: var(--ink2); }
+.memo code { background: var(--surface-2); color: var(--ink); }
+.typing { background: var(--surface-2); }
+.field input[type="text"], .field input[type="email"], .field textarea { background: var(--surface); color: var(--ink); border-color: var(--rule-strong); }
+/* 24 Nov compliance audit: pink number circle on the "bad" step was pink on pink; the frosted button was 5.6:1 (AAA needs 7:1) */
+.flow li.bad .fn { background: rgba(255,154,154,.16); color: #FFB3B3; }
+.btn-w { background: rgba(190,196,220,.1); }
+.btn-w:hover { background: rgba(190,196,220,.18); }
+
+
+
+/* 25 Nov visual audit fixes */
+/* Two grounds only: paper and slate. The green-tinted band and the blue footer were reading as accidental colours. */
+.bg-mint, .ft { background: var(--slate); }
+.ft { border-top: 1px solid var(--rule); }
+/* One primary button style: every "Request a consultation" is the light pill */
+.btn-w, .btn-w:hover { background: var(--cta-bg); color: #0D0F18; border: 0; -webkit-backdrop-filter: none; backdrop-filter: none; }
+.btn-w:hover { background: #FFFFFF; }
+/* 25 Nov code review */
+.skip { background: #F3F5FB; color: #0D0F18; }
+
+/* Portrait circles: dark, one tone for all three partners */
+.pt-1, .pt-2, .pt-3 { --c: #1F243C; }
+.pt::before { background: radial-gradient(circle at 50% 30%, #2A3152 0%, var(--c) 70%); box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); }
+
+/* In the dark look the navy bands use the slate ground like every other band */
+.band-navy { background: var(--slate); }
+.band-navy .chat { color: var(--ink); border-color: var(--rule); }

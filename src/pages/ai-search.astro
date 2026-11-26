@@ -1,0 +1,218 @@
+---
+/**
+ * How AI search decides who to name (v11.4 draft). Copy: AI-SEARCH-PAGE-COPY.md, from the Levarum Super Deck v1.0
+ * ("Any audience" slides only). Stays on our own domain: sources are printed as text, nothing links out.
+ * v11.7 (22 Nov 2026): where each AI looks, claim your profiles, low/climbing/high, a plain-number sample report,
+ * Levarum described as a tool, and an affiliation disclosure line. The disclosure is a DRAFT for the attorney to check.
+ */
+import Base from '../layouts/Base.astro';
+import ConsultForm from '../components/ConsultForm.astro';
+import FiveGatesDrawer from '../components/FiveGatesDrawer.astro';
+import { GATES, GATE_ART, GATE_LEFT, SITE } from '../data/site';
+import { tick, inkArt } from '../lib/icons';
+
+const ld = { '@context': 'https://schema.org', '@type': 'WebPage', name: 'How AI search decides who to name', url: `${SITE}/ai-search`,
+  description: 'How AI assistants choose which businesses to name: the five gates, named versus linked, the levers in order, and a sample report.',
+  isPartOf: { '@id': `${SITE}/#website` }, about: { '@id': `${SITE}/#organization` } };
+const shift = [
+  ['What you get', 'About ten links', 'One written answer that names a few businesses'],
+  ['Stability', 'Fairly stable day to day', 'Changes each time the question is asked'],
+  ['How you check', 'Look up your position', 'Only as a rate, across many asks'],
+  ['What you win', 'A click', 'Being named, and sometimes linked'],
+  ['The entry ticket', 'Crawlable, indexed pages', 'The same: ordinary search work still comes first'],
+];
+const levers = [
+  ['Access', 'Let the AI search crawlers in, firewall included.'],
+  ['Index', 'Make sure the search engines have your pages.'],
+  ['Clear answers', 'Direct, quotable answers, with facts you can source.'],
+  ['Identity', 'The same name, address and details everywhere.'],
+  ['Mentions', 'Reviews, listings and coverage on other sites.'],
+  ['Measure', 'Baseline, change, measure again.'],
+];
+// Where each AI looks: BrightLocal's 2026 local AI research. No numbers are stated: the numeric shares were removed on 23 Nov 2026 as unconfirmed.
+// 25 Nov 2026: the ChatGPT and Yelp wording rests on search excerpts of brightlocal.com/resources/ai-directory-sources/ and secondary write-ups;
+// the page itself has not been opened by a person. Open it before adding any figure.
+const looks = [
+  ['Google AI Overviews and AI Mode', 'Google Business Profile is the most-cited source. Then Yelp and Facebook.', 'Claim and complete your Google Business Profile, plus current Facebook and Yelp pages.'],
+  ['ChatGPT', 'Yelp is the directory BrightLocal found most often in ChatGPT’s local answers. Business websites and other directories appear too. Other studies find much less Yelp, so results vary by method.', 'Keep your own pages clear, and claim Yelp and the directories for your trade.'],
+  ['All three', 'Business websites are cited too.', 'A clear page for each service you sell.'],
+];
+const claims = [
+  ['Google Business Profile', 'The source Google’s AI answers cite most for local businesses.', 'Third-party study'],
+  ['Yelp', 'The directory BrightLocal found most often in ChatGPT’s local answers. Other studies differ.', 'Third-party study'],
+  ['ChatGPT Business Hub', 'New, in beta since 10 November 2026. Claim by phone, business email, website domain or Shopify. OpenAI reviews each claim. OpenAI says claiming doesn’t guarantee more visibility or control over its recommendations, and that ChatGPT may use other sources too.', 'Official, OpenAI'],
+  ['Your trade’s directories', 'Industry directories can matter too, such as Zocdoc for dentists and Avvo for lawyers.', 'Our view'],
+];
+const bands = [
+  ['Low', 'Named in fewer than 2 of every 10 answers', 'Be findable', 'Let AI crawlers in. Claim your profiles. Use the same name, address and phone everywhere.'],
+  ['Climbing', 'Named in 2 to 5 of every 10', 'Be where AI looks for you', 'Get onto the sites your report shows AI citing: reviews, directories, local press. Give each service a clear page.'],
+  ['High', 'Named in more than 5 of every 10', 'Keep it', 'Keep details current and reviews coming. Measure every month and act only on changes bigger than the normal swing.'],
+];
+// Sample report (invented). n = answers naming each business, of 75; shown as about N in 10; the range decides the status.
+// "Expect if asked again" is computed, so the rows cannot disagree. Rule decided by Tait in Linear (LEV-545, 20 Nov 2026):
+// count plus or minus 1.4 x the 95% Wilson half-width, in whole answers, kept between 0 and the answers scored. MJ to confirm (LEV-570).
+const swing = (n: number, total = 75) => { const z = 1.96, p = n / total;
+  const h = 1.4 * total * (z * Math.sqrt(p * (1 - p) / total + z * z / (4 * total * total))) / (1 + z * z / total);
+  return [Math.max(0, Math.round(n - h)), Math.min(total, Math.round(n + h))] as const; };
+const linked = 17;   // answers in which Larkmoor's own website was linked, of 75
+const rep = ([
+  { b: 'Larkmoor Coffee', n: 44, key: true },
+  { b: 'Bramblewick Roasters', n: 36, st: 'Too close to call' },
+  { b: 'Tindle & Rye Roasters', n: 19, st: 'Behind Larkmoor' },
+] as { b: string; n: number; key?: boolean; st?: string }[]).map((r) => ({ ...r, lo: swing(r.n)[0], hi: swing(r.n)[1] }));
+const ten = (n: number) => Math.round((n / 75) * 10);
+const dont = ['What one person sees in the ChatGPT app', 'Results for an engine we didn’t ask', 'That a move inside the margin means anything', 'Rankings, traffic, leads or revenue', 'That a suggested step caused a change'];
+const safe = ['Scores are estimates from a limited number of answers, collected at one time from one stated location.', 'Each report names the engine, model, location and date behind it.', 'Nobody can promise a place in an AI answer.'];
+const pts = ['30 minutes, by video or in person', 'We’ll tell you plainly if Discover isn’t worth it for you', 'Nothing to install, nothing changed in your accounts'];
+---
+<Base title="How AI search (GEO) decides who to name | AugMind" canon="ai-search" cur="ai" sticky="#consult" ld={ld}
+  description="AI assistants either name your business or they don't. How an answer is built, the five places a business drops out, and how to measure it with a margin of error.">
+
+<section class="hero ai-hero" aria-labelledby="ais-h"><div class="w ai-hero-g">
+  <div class="hero-t">
+  <p class="pill">AI search (GEO)</p>
+  <h1 class="h1" id="ais-h">When someone asks AI for a business like yours, <span>does it name you?</span></h1>
+  <p class="sub">Search used to rank you. An AI assistant either names you or it doesn’t. Here is how it decides, and how you can tell.</p>
+  <div class="cta-row"><a class="btn btn-w" href="#consult">Request a consultation</a><button class="link" type="button" data-open="five-gates">See the 5 gates where businesses drop out</button></div>
+  </div>
+  {/* Six example businesses pass five gates; the dots show how many are still in after each one. Counts are beside the dots, so colour is never the only signal. */}
+  <figure class="gcard" aria-labelledby="gcard-cap">
+    <figcaption id="gcard-cap"><b>Five gates</b><span>Example: six businesses could answer one buyer question.</span></figcaption>
+    <ol>{GATES.map(([t], i) => { const left = parseInt(GATE_LEFT[i], 10); return (
+      <li><span class="gn">{i + 1}</span><Fragment set:html={inkArt('gate-art', GATE_ART[i])} /><b>{t}</b>
+        <span class="gbar" aria-hidden="true"><i style={`width:${(left / 6 * 100).toFixed(2)}%`}></i></span>
+        <span class="gleft">{GATE_LEFT[i]}</span></li>
+    ); })}</ol>
+  </figure>
+</div></section>
+
+<section class="sec" aria-labelledby="shift-h"><div class="w">
+  <div class="sec-head"><p class="kick">The shift</p><h2 id="shift-h">Search ranked you. AI either names you or it doesn’t.</h2></div>
+  <div class="cmp" role="table" aria-label="Search results page compared with an AI answer">
+    <div class="cmp-h" role="row"><span role="columnheader"><span class="sr">Question</span></span><span role="columnheader">Search results page</span><span role="columnheader">AI answer</span></div>
+    {shift.map(([k, a, b]) => <div class="cmp-r" role="row"><b role="rowheader">{k}</b><span role="cell"><i class="cmp-l" aria-hidden="true">Search results page</i>{a}</span><span role="cell"><i class="cmp-l" aria-hidden="true">AI answer</i>{b}</span></div>)}
+  </div>
+</div></section>
+
+<section class="sec bg-slate" aria-labelledby="one-h"><div class="w stat">
+  <div class="stat-n" aria-hidden="true"><span>Fewer than</span><b>1 in 100</b></div>
+  <div class="stat-t">
+    <p class="kick">Why one screenshot proves nothing</p>
+    <h2 id="one-h">That is the chance an AI assistant gives the same list of brands twice.</h2>
+    <p class="lede">The same question, asked twice, rarely returns the same list. A rate across repeated asks is stable enough to measure. A single answer is an anecdote.</p>
+    <p class="src">Source: SparkToro and Gumshoe, about 2,961 runs of 12 prompts, January 2026, reported by Search Engine Land. Not peer reviewed.</p>
+  </div>
+</div></section>
+
+<section class="sec" aria-labelledby="gt-h"><div class="w">
+  <div class="sec-head"><p class="kick">How an answer is built</p><h2 id="gt-h">Five steps. Five places to drop out.</h2>
+    <p class="lede">A business can fall out at any step. For local questions, ChatGPT may also use an approximate location.</p></div>
+  <ol class="g5">{GATES.map(([t, , lose], i) => <li><span class="gn">{i + 1}</span><div><h3>{t}</h3><p>{lose}</p></div></li>)}</ol>
+  <p class="more"><button class="link" type="button" data-open="five-gates">Watch the five gates play out</button></p>
+</div></section>
+
+<section class="lvz" aria-labelledby="lvz-h">
+  <div class="lvz-in">
+    <div class="lvz-bar"><img class="lvz-logo" src="/assets/levarum-lockup-small.svg?v=2" width="203" height="44" alt="Levarum"><p class="lvz-cap">AI visibility report · sample</p></div>
+    <div class="lvz-keysplit">
+      <div class="lvz-key"><p class="lvz-kf">about 6 <span>in 10</span></p><p class="lvz-kfs">AI answers that named Larkmoor Coffee. Sample figures, invented.</p></div>
+      <div>
+        <h2 class="lvz-h" id="lvz-h">Each business is counted against its local competitors. <i>The range shows what is real.</i></h2>
+        <p class="lvz-lead">Levarum asks AI the questions your customers ask, then says in plain numbers how often each business is named. The range sits behind every number and decides who is ahead. Levarum measures one AI engine today: OpenAI’s model with web search.</p>
+      </div>
+    </div>
+    <ul class="lvz-steps">
+      <li><img src="/assets/lv-prompts.svg" width="32" height="32" alt=""><h3>Ask</h3><p>25 questions, each asked 3 times.</p></li>
+      <li><img src="/assets/lv-track.svg" width="32" height="32" alt=""><h3>Count</h3><p>How often each business is named.</p></li>
+      <li><img src="/assets/lv-margin.svg" width="32" height="32" alt=""><h3>Compare</h3><p>Ahead, behind or too close to call.</p></li>
+    </ul>
+    <figure class="lvz-rep" aria-labelledby="lvz-fc">
+      <figcaption id="lvz-fc"><b>AI names Larkmoor Coffee in about 6 of every 10 answers. Bramblewick Roasters is too close to call.</b> Larkmoor Coffee, Ostley Falls. Out of every 10 AI answers, who gets named. Sample report: all businesses and figures are invented.</figcaption>
+      <div class="lvz-dots">
+        {rep.map((r) => <div class={r.key ? 'lvz-dr lvz-dr--key' : 'lvz-dr'}>
+          <span class="l">{r.b}</span>{r.st && <span class="lvz-st">{r.st}</span>}
+          <span class="dd" role="img" aria-label={`${r.b}: about ${ten(r.n)} in 10 answers`}>{Array.from({ length: 10 }, (_, i) => <i class={i < ten(r.n) ? 'on' : ''}></i>)}</span>
+          <span class="v">about {ten(r.n)} in 10</span>
+        </div>)}
+      </div>
+      <p class="lvz-note"><b>Linked to its website:</b> about 2 in 10 answers for Larkmoor Coffee.</p>
+      <details class="lvz-more">
+        <summary>See the counts</summary>
+        <table class="lvz-t">
+          <thead><tr><th scope="col">Business</th><th scope="col" class="n">Named in</th><th scope="col" class="n">Expect if asked again</th></tr></thead>
+          <tbody>{rep.map((r) => <tr class={r.key ? 'me' : ''}><th scope="row">{r.b}</th><td class="n">{r.n} of 75</td><td class="n">{r.lo} to {r.hi}</td></tr>)}</tbody>
+        </table>
+        <p class="lvz-note">When two ranges overlap, the report says “too close to call” rather than ranking them. Larkmoor’s website was linked in {linked} of 75 answers (expect {swing(linked)[0]} to {swing(linked)[1]}). The three asks of one question are not fully independent, so each range is an estimate.</p>
+      </details>
+    </figure>
+  </div>
+  <div class="lvz-inv"><div class="lvz-in lvz-inv-in">
+    <h3 class="lvz-ih">Relevant, by design. <i>Raised because it bears on the question.</i></h3>
+    <p>Levarum comes from the Latin <i>levare</i>, to raise. The same root gives us lever, elevate, alleviate and relevant. It measures whether a business is raised into an AI answer because it bears on the question.</p>
+    <a class="lvz-btn lvz-btn--inv" href="#consult">Request a consultation</a>
+  </div></div>
+  <div class="lvz-in"><p class="lvz-src">Source: sample report with invented businesses and figures. Levarum is a product and trade name of The IT Associates, LLC: a tool AugMind uses to measure AI search, which clients subscribe to. Levarum is not affiliated with OpenAI.</p>
+    <p class="lvz-src">Disclosure: Tait Goodwin, one of AugMind’s three partners, owns The IT Associates, LLC, which makes Levarum.</p></div>
+</section>
+
+<section class="sec bg-slate" aria-labelledby="nl-h"><div class="w">
+  <div class="sec-head"><p class="kick">Named, linked</p><h2 id="nl-h">Being named and being linked are different results.</h2>
+    <p class="lede">We report both and never blend them.</p></div>
+  <div class="two">
+    <div class="tcard"><h3>Named</h3><p>The business is named in the answer text. This feeds how often you are mentioned, compared with other local businesses.</p></div>
+    <div class="tcard"><h3>Linked</h3><p>The answer links to the business’s own site. Links to directories or review sites count as sources, not as links to you.</p></div>
+  </div>
+</div></section>
+
+<section class="sec" aria-labelledby="wl-h"><div class="w">
+  <div class="sec-head"><p class="kick">Where each AI looks</p><h2 id="wl-h">Each AI leans on different sites.</h2>
+    <p class="lede">For local businesses, Google’s AI answers lean on Google’s own profiles. ChatGPT draws on a wider mix of websites and directories.</p></div>
+  <div class="cmp" role="table" aria-label="Sites each AI assistant cites most for local businesses">
+    <div class="cmp-h" role="row"><span role="columnheader">AI assistant</span><span role="columnheader">Cited most for local businesses</span><span role="columnheader">What to do</span></div>
+    {looks.map(([k, a, b]) => <div class="cmp-r" role="row"><b role="rowheader">{k}</b><span role="cell"><i class="cmp-l" aria-hidden="true">Cited most for local businesses</i>{a}</span><span role="cell"><i class="cmp-l" aria-hidden="true">What to do</i>{b}</span></div>)}
+  </div>
+  <p class="src">Source: BrightLocal’s local AI visibility study (2026), which looked at the sources Google’s AI Overviews, Google’s AI Mode and ChatGPT cite for local businesses. Third-party research, not peer reviewed; other studies report different results. Every report shows the sites cited for your business.</p>
+</div></section>
+
+<section class="sec bg-slate" aria-labelledby="cl-h"><div class="w">
+  <div class="sec-head"><p class="kick">Claim your profiles</p><h2 id="cl-h">Claim the profiles AI reads about you.</h2>
+    <p class="lede">These are the first fixes, and the cheapest. Claiming makes your details accurate. It doesn’t buy a place in the answer.</p></div>
+  <div class="two cl">
+    {claims.map(([t, p, l]) => <div class="tcard"><h3>{t}</h3><p>{p}</p><p class="lbl">{l}</p></div>)}
+  </div>
+  <p class="src">Sources: BrightLocal, as above; OpenAI Help Center, “Businesses in ChatGPT”, read 22 November 2026. Business Hub is a beta and may change.</p>
+</div></section>
+
+<section class="sec" aria-labelledby="lv-h"><div class="w">
+  <div class="sec-head"><p class="kick">What moves the result</p><h2 id="lv-h">Work the levers in order. Access before content.</h2></div>
+  <ol class="lev">{levers.map(([t, p], i) => <li><span class="gn">{i + 1}</span><div><h3>{t}</h3><p>{p}</p></div></li>)}</ol>
+  <div class="two paths">
+    <div class="tcard"><p class="kick">Path A · from memory</p><h3>Named, with no link</h3><p>It changes when a new model ships. Lasting coverage on other sites moves it.</p></div>
+    <div class="tcard"><p class="kick">Path B · from a live search</p><h3>Cited, with a link</h3><p>It changes within days. Indexing, clear passages and freshness move it.</p></div>
+  </div>
+  <p class="src">We record whether web search ran on every answer, so the two paths can be told apart. Answers without a search are left out of the scores.</p>
+</div></section>
+
+<section class="sec bg-slate" aria-labelledby="bd-h"><div class="w">
+  <div class="sec-head"><p class="kick">Low, climbing, high</p><h2 id="bd-h">Where you start decides what to do first.</h2></div>
+  <ol class="bands">{bands.map(([k, r, t, p]) => <li class="tcard"><p class="kick">{k} · {r}</p><h3>{t}</h3><p>{p}</p></li>)}</ol>
+  <p class="src">The bands are AugMind’s own guide, not an industry standard. Nobody controls what an AI says: these steps raise the odds of being named; they don’t guarantee it.</p>
+</div></section>
+
+<section class="sec" aria-labelledby="lim-h"><div class="w">
+  <div class="sec-head"><p class="kick">Limits, said first</p><h2 id="lim-h">A report is evidence from one run. Not a promise.</h2></div>
+  <div class="two">
+    <div class="agree"><h3>What we don’t claim</h3><ul>{dont.map((d) => <li>{d}</li>)}</ul></div>
+    <div class="agree"><h3>Always safe to say</h3><ul>{safe.map((d) => <li><Fragment set:html={tick} />{d}</li>)}</ul></div>
+  </div>
+</div></section>
+<section class="sec bg-slate" id="consult" aria-labelledby="consult-h" data-form-zone><div class="w consult">
+  <div class="consult-t">
+    <h2 id="consult-h">Find out whether AI names you.</h2>
+    <p>Pick a time to talk with a partner. Bring the questions your buyers ask.</p>
+    <ul class="pts">{pts.map((p) => <li><Fragment set:html={tick} />{p}</li>)}</ul>
+  </div>
+  <ConsultForm id="c" page="AI search" />
+</div></section>
+<FiveGatesDrawer />
+</Base>

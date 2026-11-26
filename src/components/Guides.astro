@@ -1,0 +1,11 @@
+---
+import { PARTNERS } from '../data/site';
+import { tick } from '../lib/icons';
+import Portrait from './Portrait.astro';
+const people = [PARTNERS.tom, PARTNERS.tait, PARTNERS.saima];
+const guarantees = ['Read-only Step 1', 'Confirmed sales kept apart', 'Every number source-linked', '100% client-owned accounts'];
+---
+<ul class="guides">{people.map((p) => <li class="guide"><Portrait p={p} alt={`Portrait of ${p.n}`} /><h3>{p.n}</h3><p class="role">{p.role}</p><p class="bio">{p.bio}</p></li>)}</ul>
+<ul class="gov" aria-label="Our data guarantees">
+  {guarantees.map((g) => <li><Fragment set:html={tick} />{g}</li>)}
+</ul>

@@ -1,0 +1,23 @@
+---
+/**
+ * The 5 gates of AI search (GEO). Plays each time it opens (site.js): each gate plays as it scrolls into view,
+ * six example businesses drop out at the top, and "Ask again" replays it. Gate drawings from the v10 GeoPath.
+ */
+import { GATES, GATE_ART, GATE_LEFT } from '../data/site';
+import { I, inkArt } from '../lib/icons';
+---
+<dialog class="dw" id="five-gates" aria-labelledby="gates-t">
+<div class="dw-in">
+  <div class="dw-h"><p>AI search (GEO)</p><button class="x" type="button" data-close aria-label="Close the five gates"><Fragment set:html={I.x} /></button></div>
+  <div class="dw-b">
+    <div class="dw-intro"><h2 id="gates-t" tabindex="-1" autofocus>The 5 gates where businesses drop out</h2>
+      <p>When an AI assistant searches the web to answer a buyer, it typically passes five gates. A business can drop out at any one of them. Answers also change from one ask to the next, so we ask each buyer question several times.</p>
+      <div class="field"><span class="field-d" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="field-l">Example: six businesses could answer one buyer question.</span></div></div>
+    <ol class="gates" data-gates>{GATES.map(([t, p, lose, fix], i) => (
+      <li class="gate" style={`--i:${i}`}><div class="gate-h"><span class="gn">{i + 1}</span><h3>{t}</h3><Fragment set:html={inkArt('gate-art', GATE_ART[i])} /></div><p>{p}</p><p class="lose"><span class="gstamp" aria-hidden="true">{i === 4 ? 'No link' : 'Out'}</span><span>Where you drop out: {lose}</span></p><p class="left">{GATE_LEFT[i]}</p><p class="fix"><b>The fix:</b> {fix}</p></li>
+    ))}</ol>
+    <div class="gates-end"><p>Ask again and the list can change.</p><button class="again" type="button" data-gates-again>Ask again</button></div>
+    <div class="dw-cta"><p>Discover tests your buyer prompts and shows which gate you drop out at.</p><a class="btn btn-p" href="/#consult" data-close>Request a consultation</a></div>
+  </div>
+</div>
+</dialog>

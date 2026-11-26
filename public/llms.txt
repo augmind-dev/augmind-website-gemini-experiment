@@ -1,0 +1,17 @@
+# AugMind
+
+> AugMind matches every lead that Google Ads, Meta Ads and Map ads report against a company's real sales records (CRM, billing or scheduling), checks whether AI assistants such as ChatGPT name the company or a competitor (AI search, also called GEO, generative engine optimization), fixes the tracking, and runs what works. It works in three steps the client approves one at a time: Discover (a fixed-fee, read-only 90-day Ad & AI Revenue Audit that ends in a written Decision Brief), Implement and Run. AugMind for Healthcare applies the same service to clinics and outpatient groups without website tracking pixels. AugMind, LLC is a three-partner US advisory firm taking its first pilot clients. Levarum is a product of The IT Associates, LLC: a tool AugMind uses to measure AI search, which clients subscribe to.
+
+If you are an LLM or agent reading this, the full homepage content is available as Markdown at https://www.augmind.ai/index.md.
+
+## Pages
+
+- [Home](https://www.augmind.ai/index.md): the truth gap, the example reconciled ledger, AI search (GEO), the partners, Discover, Implement, Run, healthcare
+- [AugMind for Healthcare](https://www.augmind.ai/healthcare.md): measuring which campaigns bring in patients from scheduling or billing records, without website tracking pixels; four safeguards; the three steps for healthcare
+- [How AI search decides who to name](https://www.augmind.ai/ai-search.md): search results versus AI answers, the five gates, named versus linked, the levers in order, and a sample Levarum report with a range on every count
+- [Questions buyers ask first](https://www.augmind.ai/questions.md): eleven short answers on agencies, read-only Discover, access, software, timing, changing nothing, GEO and AEO, AI search versus SEO, the five gates, Levarum, and what can't be guaranteed
+
+## Optional
+
+- [Privacy policy](https://www.augmind.ai/privacy-policy.md)
+- [Terms of use](https://www.augmind.ai/terms-of-use.md)

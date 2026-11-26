@@ -1,0 +1,6 @@
+---
+/** Phone-only sticky CTA: appears once the hero button scrolls away, hides while a form is on screen (site.js). */
+interface Props { href: string }
+const { href } = Astro.props;
+---
+<div class="stk"><a class="btn btn-p" href={href}>Request a consultation</a></div>

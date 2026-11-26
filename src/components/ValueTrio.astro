@@ -1,0 +1,11 @@
+---
+const items = [
+  ['See which leads become customers', 'See which campaigns bring paying customers, and move budget with evidence instead of a hunch.'],
+  ['Find out whether AI names you', 'Know whether ChatGPT and other assistants name you, a competitor, or no one, and fix what’s in your control.'],
+  ['Own every account and formula', 'Tracking, reports, and spreadsheets live in your accounts. You can audit, keep, or walk away with all of it.'],
+];
+---
+<div class="sec-head"><h2 id="val-h">What changes once your numbers match</h2></div>
+<ol class="trio">
+  {items.map(([h, p], i) => <li><span class="num">{i + 1}</span><h3>{h}</h3><p>{p}</p></li>)}
+</ol>

@@ -1,0 +1,15 @@
+---
+/** Discover / Implement / Run cards with inked drawings that draw themselves in (site.js: .steps.is-in). */
+import { STEP_ART, type Step } from '../data/site';
+import { inkArt } from '../lib/icons';
+interface Props { items: Step[] }
+const { items } = Astro.props;
+---
+<ol class="steps">{items.map((s, i) => (
+  <li class="step" style={`--i:${i}`}>
+    <div class="step-h"><span class="n">{i + 1}</span><Fragment set:html={inkArt('st-art', STEP_ART[i])} />{s.opt && <span class="opt">{s.opt}</span>}</div>
+    <h3>{s.t}</h3><p>{s.p}</p>
+    <ul>{s.li.map((l) => <li>{l}</li>)}</ul>
+    <p class="step-get"><b>You get:</b>{s.get}</p>
+  </li>
+))}</ol>

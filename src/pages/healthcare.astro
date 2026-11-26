@@ -1,0 +1,78 @@
+---
+/** AugMind for Healthcare (v11.2). Saima Anis signed off on the page on 23 Nov 2026, so it is indexable. */
+import Base from '../layouts/Base.astro';
+import HcMark from '../components/HcMark.astro';
+import Portrait from '../components/Portrait.astro';
+import Steps from '../components/Steps.astro';
+import ConsultForm from '../components/ConsultForm.astro';
+import { PARTNERS, STEPS_HC, SITE } from '../data/site';
+import { tick } from '../lib/icons';
+const saima = PARTNERS.saima;
+const ld = { '@context': 'https://schema.org', '@type': 'Service', name: 'AugMind for Healthcare', url: `${SITE}/healthcare`,
+  description: 'See which campaigns bring in patients, built to work without website tracking pixels. Shaped by physician partner Saima Anis, MD, MPH.',
+  provider: { '@id': `${SITE}/#organization` }, audience: { '@type': 'Audience', audienceType: 'Healthcare providers' } };
+const safe = ['No tracking pixels on patient-facing pages', 'No patient details on our forms or sent to ad platforms', 'Nothing accessed before your reviews sign off'];
+const flow = [
+  ['A visitor opens a specialist booking page', 'For example, an oncology or behavioral health appointment page.', false],
+  ['A pixel reports the page view to the ad platform', 'The page address alone can hint at a health condition.', true],
+  ['AugMind works from your records instead', 'Campaign results are matched to bookings internally, with no pixel on the page.', false],
+] as const;
+const four = [
+  ['Measured against internal records', 'Campaigns are compared with your scheduling or billing records, not with data collected in the visitor’s browser.'],
+  ['Platform health settings applied', 'Where Google and Meta offer health-related restrictions for advertisers, we apply them before anything runs.'],
+  ['Privacy, security & legal reviews before access', 'We access nothing until your privacy, security, and legal teams have reviewed and approved the approach.'],
+  ['Physician-led privacy design', 'Saima Anis, MD, MPH, shapes how each engagement handles data, from the first request to the final report.'],
+];
+const pts = ['No patient details are needed to book', '30 minutes, by video or in person', 'Nothing changed in your accounts during Discover'];
+---
+<Base title="Healthcare marketing measurement without tracking pixels | AugMind" canon="healthcare" cur="hc" sticky="#hc-consult" ld={ld}
+  description="See which campaigns bring in patients, built to work without website tracking pixels. Shaped by physician partner Saima Anis, MD, MPH.">
+
+<section class="hero" aria-labelledby="hch-h"><div class="w hch">
+  <div class="hero-t">
+    <HcMark h={32} live />
+    <h1 class="h1" id="hch-h" style="margin-top:20px">See which campaigns bring in patients. <span>Built to work without tracking pixels.</span></h1>
+    <p class="sub">We measure from your own scheduling or billing records, in a process your privacy and legal teams approve before we access anything. You see which campaigns bring in patients.</p>
+    <div class="cta-row"><a class="btn btn-w" href="#hc-consult" data-hero-cta>Request a consultation</a><a class="link" href="#hc-safe">See the four safeguards</a></div>
+    <p class="trust">Your privacy, security, and legal reviews come first · Read-only Step 1 · Accepting pilot clients</p>
+  </div>
+  <aside class="safe" aria-labelledby="saima-h">
+    <Portrait p={saima} alt={`Portrait of ${saima.n}`} />
+    <h2 id="saima-h">{saima.n}</h2><p class="role">Partner · Clinical privacy</p>
+    <p class="say">A physician executive and clinical AI strategist, Saima shapes how every healthcare engagement handles data.</p>
+    <ul>{safe.map((s) => <li><Fragment set:html={tick} />{s}</li>)}</ul>
+  </aside>
+</div></section>
+
+<section class="sec bg-slate" aria-labelledby="pix-h"><div class="w pix">
+  <div class="pix-t"><h2 id="pix-h">Why some providers lost sight of their marketing</h2>
+    <p>Ad platforms measure campaigns with tracking pixels: small pieces of code on your website. On a page for booking a specialist, a pixel can tell an ad platform which page a visitor viewed—and that can reveal something about their health.</p>
+    <p>Since 2023, federal regulators have warned hospitals and telehealth providers about tracking technology on their websites. Some providers removed their pixels. That was the careful thing to do, but it also left them unable to tell which campaigns bring in patients.</p>
+    <p>AugMind for Healthcare measures from your own records instead of the visitor’s browser.</p></div>
+  <ol class="flow" aria-label="How a pixel can expose health information">
+    {flow.map(([b, s, bad], i) => <li class={bad ? 'bad' : undefined}><span class="fn">{i + 1}</span><div><b>{b}</b><span>{s}</span></div></li>)}
+  </ol>
+</div></section>
+
+<section class="sec" id="hc-safe" aria-labelledby="four-h"><div class="w">
+  <div class="sec-head"><h2 id="four-h">Four safeguards for healthcare engagements</h2></div>
+  <ol class="four">
+    {four.map(([h, p], i) => <li><span class="num">{i + 1}</span><h3>{h}</h3><p>{p}</p></li>)}
+  </ol>
+  <p class="first">Your privacy, security, and legal reviews come first.</p>
+</div></section>
+
+<section class="sec bg-mint" aria-labelledby="hhow-h"><div class="w">
+  <div class="sec-head"><p class="kick">How it works for healthcare</p><h2 id="hhow-h">Discover. Implement. Run.</h2><p class="lede">The same three steps, with your reviews built into each one.</p></div>
+  <Steps items={STEPS_HC} />
+</div></section>
+
+<section class="sec" id="hc-consult" aria-labelledby="hcc-h" data-form-zone><div class="w consult">
+  <div class="consult-t">
+    <h2 id="hcc-h">Talk with Saima and the partners.</h2>
+    <p>Pick a time to talk with a partner. We’ll start with how your group measures campaigns today and what your reviewers will need.</p>
+    <ul class="pts">{pts.map((p) => <li><Fragment set:html={tick} />{p}</li>)}</ul>
+  </div>
+  <ConsultForm id="h" hc title="Request a healthcare consultation" />
+</div></section>
+</Base>

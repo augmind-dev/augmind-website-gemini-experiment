@@ -1,0 +1,21 @@
+# AugMind — https://www.augmind.ai
+# Plain-language summary for LLM readers: https://www.augmind.ai/llms.txt
+# Markdown map of the site: https://www.augmind.ai/sitemap.md
+
+User-agent: *
+Allow: /
+
+# AI search and answer crawlers are named on purpose: this site teaches that a blocked crawler means a business
+# cannot be named in an AI answer. Allowing them is the default; naming them makes it a stated choice.
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: GPTBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: ClaudeBot
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://www.augmind.ai/sitemap-index.xml

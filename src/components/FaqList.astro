@@ -1,0 +1,7 @@
+---
+import type { faqs } from '../data/faqs';
+import { I } from '../lib/icons';
+interface Props { items: typeof faqs; ids?: boolean }
+const { items, ids = false } = Astro.props;
+---
+<div class="qa">{items.map((f) => <details id={ids ? f.id : undefined}><summary>{f.q}<span class="pm"><Fragment set:html={I.plus} /></span></summary><div class="ans"><p>{f.a}</p></div></details>)}</div>

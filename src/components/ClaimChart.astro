@@ -1,0 +1,26 @@
+---
+/** Claimed leads above the line, closed sales below it, per channel. One scale both ways: 1 lead or sale = 0.5 units.
+ * Example figures from LEDGER_ROWS (the same ledger as the home hero). Every bar carries its number, so colour is never the only signal. */
+import { LEDGER_ROWS } from '../data/site';
+const short: Record<string, string> = { g: 'Google', m: 'Meta', l: 'Local Map' };
+const BASE = 128, K = 0.5, W = 72, GAP = 40, X0 = 24;
+const label = LEDGER_ROWS.map(r => `${r.ch}: ${r.claim} claimed, ${r.sales} closed`).join('. ');
+---
+<figure class="cc" aria-labelledby="cc-cap">
+  <figcaption id="cc-cap"><b>Claimed leads and closed sales</b><span>Above the line: leads the platform claimed. Below: sales in your records. Example figures.</span></figcaption>
+  <svg viewBox="0 0 360 196" role="img" aria-label={`Example. ${label}.`}>
+    <defs>
+      <linearGradient id="cc-up" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="cc-s1"/><stop offset="1" class="cc-s2"/></linearGradient>
+      <linearGradient id="cc-down" x1="0" y1="1" x2="0" y2="0"><stop offset="0" class="cc-d1"/><stop offset="1" class="cc-d2"/></linearGradient>
+    </defs>
+    {LEDGER_ROWS.map((r, i) => { const x = X0 + i * (W + GAP), up = r.claim * K, dn = r.sales * K; return (
+      <g>
+        <rect class="cc-up" x={x} y={BASE - up} width={W} height={up} fill="url(#cc-up)" /><rect class="cc-top" x={x} y={BASE - up} width={W} height="2" />
+        <text class="cc-n" x={x + W / 2} y={BASE - up - 8}>{r.claim}</text>
+        <rect x={x} y={BASE} width={W} height={dn} fill="url(#cc-down)" /><rect class="cc-bot" x={x} y={BASE + dn - 2} width={W} height="2" />
+        <text class="cc-n" x={x + W / 2} y={BASE + dn + 16}>{r.sales}</text>
+        <text class="cc-l" x={x + W / 2} y="190">{short[r.id]}</text>
+      </g>); })}
+    <line class="cc-base" x1="0" y1={BASE} x2="360" y2={BASE} />
+  </svg>
+</figure>

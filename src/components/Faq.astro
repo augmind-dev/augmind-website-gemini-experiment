@@ -1,0 +1,9 @@
+---
+/** Homepage FAQ: the five questions marked home in src/data/faqs.ts. */
+import { faqs } from '../data/faqs';
+import FaqList from './FaqList.astro';
+---
+<section class="sec" aria-labelledby="faq-h"><div class="w faq">
+  <div class="sec-head" style="margin:0"><h2 id="faq-h">Questions buyers ask first</h2><a class="link" href="/questions">See all {faqs.length} questions →</a></div>
+  <FaqList items={faqs.filter((f) => f.home)} />
+</div></section>

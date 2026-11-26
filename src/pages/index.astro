@@ -1,0 +1,97 @@
+---
+/** Homepage (v11.2). Section order and copy match the approved static build. */
+import Base from '../layouts/Base.astro';
+import Ledger from '../components/Ledger.astro';
+import SortCard from '../components/SortCard.astro';
+import ClaimChart from '../components/ClaimChart.astro';
+import ValueTrio from '../components/ValueTrio.astro';
+import AiSearch from '../components/AiSearch.astro';
+import Guides from '../components/Guides.astro';
+import Steps from '../components/Steps.astro';
+import HealthcareStrip from '../components/HealthcareStrip.astro';
+import Faq from '../components/Faq.astro';
+import ConsultForm from '../components/ConsultForm.astro';
+import DecisionBriefDrawer from '../components/DecisionBriefDrawer.astro';
+import FiveGatesDrawer from '../components/FiveGatesDrawer.astro';
+import { SITE, STEPS_HOME, PARTNERS } from '../data/site';
+import { tick } from '../lib/icons';
+
+// Structured data: who AugMind is, who leads it and what it offers. Only facts that are visible on the page.
+const ORG = `${SITE}/#organization`;
+const person = (key: string, p: { n: string; role: string; bio: string; img: string }) => { const [name, ...suffix] = p.n.split(', '); return {
+  '@type': 'Person', '@id': `${SITE}/#${key}`, name, ...(suffix.length ? { honorificSuffix: suffix.join(', ') } : {}), jobTitle: p.role.replace(' · ', ', '),
+  description: p.bio, image: `${SITE}/team/${p.img}.webp`, worksFor: { '@id': ORG } }; };
+const ld = { '@context': 'https://schema.org', '@graph': [
+  { '@type': 'WebSite', '@id': `${SITE}/#website`, url: `${SITE}/`, name: 'AugMind', publisher: { '@id': ORG } },
+  { '@type': 'ProfessionalService', '@id': ORG, name: 'AugMind', legalName: 'AugMind, LLC', url: `${SITE}/`,
+    logo: `${SITE}/assets/augmind-logo-ink.svg`, image: `${SITE}/og-image.png`,
+    description: 'AugMind matches the leads Google and Meta report against a business’s real sales records, and checks whether AI assistants name the business.',
+    employee: (['tom', 'tait', 'saima'] as const).map((k) => person(k, PARTNERS[k])),
+    knowsAbout: ['Advertising measurement', 'Lead-to-sale reconciliation', 'AI search (generative engine optimization)'],
+    makesOffer: STEPS_HOME.map((st) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: st.t, description: `${st.p} You get: ${st.get}`, provider: { '@id': ORG } } })),
+    address: { '@type': 'PostalAddress', addressCountry: 'US' } },
+] };
+const agree = ['Zero changes to live accounts during Discover', 'Confirmed sales never blended with platform claims', 'Every figure traceable to its source', 'Stop after any step—even if the Brief says “change nothing”'];
+const pts = ['30 minutes, by video or in person', 'We’ll tell you plainly if Discover isn’t worth it for you', 'Nothing to install, nothing changed in your accounts'];
+---
+<Base title="AugMind | Know what your ad spend really earns" canon="" sticky="#consult" ld={ld}
+  description="AugMind matches every lead Google and Meta report against your real sales records, checks whether AI assistants name you, and delivers a written Decision Brief.">
+
+<section class="hero" aria-labelledby="hero-h"><div class="w hero-g">
+  <div class="hero-t">
+    <p class="pill">Ad-to-sales & AI visibility audit</p>
+    <h1 class="h1" id="hero-h">Know what your ad spend <span>really earns.</span></h1>
+    <p class="sub">We match every lead Google and Meta claim against your actual sales records—and check whether AI assistants name you or a competitor—handing you a written Decision Brief before you move a dollar.</p>
+    <div class="cta-row"><a class="btn btn-w" href="#consult" data-hero-cta>Request a consultation</a><button class="link" type="button" data-open="sample-brief">See a sample Decision Brief</button></div>
+    <p class="trust">Fixed-fee, read-only Step 1 (Discover) · Zero changes to live accounts · Accepting pilot clients</p>
+  </div>
+  <Ledger />
+</div></section>
+
+<section class="sec bg-slate" aria-labelledby="tg-h"><div class="w tg">
+  <div class="tg-t">
+    <p class="kick">The truth gap</p>
+    <h2 id="tg-h">Your ad platforms grade their own homework.</h2>
+    <p>Dashboards count clicks and form fills as wins. Your sales records count paying customers. When the two don’t match, every budget review feels like guesswork: you suspect you’re funding dead leads, but you’re afraid to cut what might be working. You shouldn’t have to take an ad platform’s word for how well its own ads worked.</p>
+    <a class="link" href="#how">See how Discover works ↓</a>
+  </div>
+  <div class="tg-r"><ClaimChart /><SortCard /></div>
+</div></section>
+
+<section class="sec" aria-labelledby="val-h"><div class="w">
+  <ValueTrio />
+</div></section>
+
+<section class="sec band-navy" aria-label="AI search"><div class="w">
+  <AiSearch />
+</div></section>
+
+<section class="sec bg-slate" aria-labelledby="who-h"><div class="w">
+  <div class="sec-head"><h2 id="who-h">Senior partners lead your audit⁠—never junior account managers.</h2>
+    <p class="lede">When ad reports look strong on paper while closed revenue stays flat, every budget decision feels like guesswork. So we start from your sales records, not the platform’s dashboard.</p></div>
+  <Guides />
+</div></section>
+
+<section class="sec" id="how" aria-labelledby="how-h"><div class="w">
+  <div class="sec-head"><p class="kick">How it works</p><h2 id="how-h">Discover. Implement. Run.</h2><p class="lede">Three steps. You approve each one in writing, and you can stop after any of them.</p></div>
+  <Steps items={STEPS_HOME} />
+  <div class="agree"><h3>Our agreement with you</h3><ul>
+    {agree.map((a) => <li><Fragment set:html={tick} />{a}</li>)}
+  </ul></div>
+</div></section>
+
+<HealthcareStrip />
+<Faq />
+
+<section class="sec bg-slate" id="consult" aria-labelledby="consult-h" data-form-zone><div class="w consult">
+  <div class="consult-t">
+    <h2 id="consult-h">Talk to a partner about your ad spend.</h2>
+    <p>Pick a time to talk with a partner. Bring last month’s ad report.</p>
+    <ul class="pts">{pts.map((p) => <li><Fragment set:html={tick} />{p}</li>)}</ul>
+    <p class="faces"><img src="/team/tom-sm.webp?v=2511" width="48" height="48" alt="" loading="lazy"><img src="/team/tait-sm.webp?v=2511" width="48" height="48" alt="" loading="lazy"><img src="/team/saima-2511b-sm.webp" width="48" height="48" alt="" loading="lazy"><span>Tom, Tait, and Saima</span></p>
+  </div>
+  <ConsultForm id="c" />
+</div></section>
+<DecisionBriefDrawer />
+<FiveGatesDrawer />
+</Base>

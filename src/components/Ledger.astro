@@ -1,0 +1,45 @@
+---
+/**
+ * MindSignal-X example ledger (hero card). Motion (site.js): totals count up, each channel is checked in turn
+ * (bars sweep, share counts up, tag stamps in), then the AI-search dots fill. Example figures, labelled as such.
+ * Each tag carries an icon as well as its word and colour, so it never depends on colour alone (WCAG 1.4.1).
+ * Bars show share of closed sales (61/21/18); the dashed outline shows share of claimed leads (53/37/9).
+ */
+import { LEDGER_ROWS } from '../data/site';
+import { I } from '../lib/icons';
+---
+<figure class="ledger" aria-labelledby="lg-cap">
+  <figcaption class="lg-bar" id="lg-cap"><img class="msx on-light" src="/assets/mindsignal-x-ink.svg" width="102" height="17" alt="MindSignal-X"><img class="msx on-dark" src="/assets/mindsignal-x-white.svg" width="102" height="17" alt="MindSignal-X"><span class="ttl">· Example 90-day ledger</span><span class="ex">Example figures, not a client. MindSignal-X is in development.</span></figcaption>
+  <div class="lg-kpi">
+    <div><b>$11,600</b><span>Ad spend checked</span></div>
+    <div><b>397</b><span>Platform-claimed leads</span></div>
+    <div class="ok"><b>51</b><span>Closed sales in CRM</span></div>
+  </div>
+  {/* Step area chart, to scale with the totals above: 397 claimed leads (96px) falls to 51 closed sales (12.3px). */}
+  <div class="lg-area" role="img" aria-label="Example: 397 leads claimed by ad platforms; 51 closed sales">
+    <svg viewBox="0 0 400 112" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="lg-area-fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" class="lga-s1"/><stop offset="1" class="lga-s2"/></linearGradient>
+      </defs>
+      <path class="lga-fill" d="M0 104 L22 104 C30 104 30 8 40 8 L218 8 C232 8 232 91.7 246 91.7 L400 91.7 L400 104 Z"/>
+      <path class="lga-line" d="M0 104 L22 104 C30 104 30 8 40 8 L218 8 C232 8 232 91.7 246 91.7 L400 91.7"/>
+      <line class="lga-base" x1="0" y1="104" x2="400" y2="104"/>
+    </svg>
+    <span class="lga-t lga-t1">397 claimed</span><span class="lga-t lga-t2">51 closed</span>
+  </div>
+  <div class="lg-cap" aria-hidden="true"><span class="key"><i class="sw"></i>Share of closed sales</span><span class="key"><i class="sw claim"></i>Share of claimed leads</span></div>
+  <ul class="lg-rows">{LEDGER_ROWS.map((r) => (
+    <li class="lg-row">
+      <button class="lg-btn" type="button" aria-expanded="false" aria-controls={`lg-d-${r.id}`}>
+        <span class="lg-l1"><span class="lg-ch"><Fragment set:html={I.chev} />{r.ch}</span><span class={`tag tag-${r.tag[1]}`}><Fragment set:html={r.tag[1] === 'scale' ? I.up : r.tag[1] === 'audit' ? I.alert : I.equal} />{r.tag[0]}</span></span>
+        <span class="lg-l2"><span><b>{r.spend}</b> · {r.claim} claimed&nbsp;→&nbsp;<b>{r.sales} closed</b></span><span>{r.cps} per sale</span></span>
+        <span class="lg-meter"><span class="lg-track" aria-hidden="true"><span class="lg-claim" style={`width:${r.cshare}%`}></span><span class="lg-fill" style={`width:${r.share}%`}></span></span><span class="lg-pct">{r.share}% of sales</span></span>
+      </button>
+      <p class="lg-det" id={`lg-d-${r.id}`} hidden>{r.det}</p>
+    </li>
+  ))}</ul>
+  <div class="lg-geo">
+    <div class="lg-geo-l"><span class="n">AI search (GEO): <span class="nw">15 buyer prompts tested</span></span><span class="r">→ Named in <b>2 of 15</b></span></div>
+    <div class="dots" role="img" aria-label="Named in 2 of 15 prompts">{Array.from({ length: 15 }, (_, i) => <i style={`--i:${i}`} class={i < 2 ? 'on' : undefined}></i>)}</div>
+  </div>
+</figure>

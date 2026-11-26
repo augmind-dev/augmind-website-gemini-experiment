@@ -1,0 +1,68 @@
+---
+/**
+ * Consultation form. Posts to the `consult` Astro Action (src/actions/index.ts), which forwards the request to the
+ * n8n workflow (CONSULT_WEBHOOK_URL / CONSULT_WEBHOOK_KEY). With script, site.js sends it in place and shows the
+ * confirmation; without script the browser posts to /scheduling, which renders the result.
+ * `values`, `errors`, `failed` and `sent` are only used by /scheduling for that no-script path.
+ */
+import { actions } from 'astro:actions';
+import { I } from '../lib/icons';
+import { BOOKING_URL } from '../data/site';
+interface Props {
+  id: string;
+  hc?: boolean;
+  title?: string;
+  values?: Record<string, string>;
+  errors?: Record<string, string | undefined>;
+  failed?: boolean;
+  sent?: boolean;
+  /** Which form this is, for the request record in n8n. */
+  page?: 'Home' | 'Healthcare' | 'Scheduling' | 'AI search';
+  /** Heading level for the card title: 3 inside a page section (default), 2 when the page's h1 sits right above it. */
+  level?: 2 | 3;
+}
+const { id, hc = false, title = 'Request a consultation', values = {}, errors = {}, failed = false, sent = false, page = hc ? 'Healthcare' : 'Home', level = 3 } = Astro.props;
+const H = level === 2 ? 'h2' : 'h3';
+const emailErr = values.email ? 'Enter an email address like name@company.com.' : 'Enter your work email.';
+const action = `/scheduling${actions.consult}`;
+const inPerson = values.format === 'In person';
+const done = `<span class="tk">${I.ok}</span><h3>Request received<span data-name></span>.</h3><p>Tom, Tait, or Saima will reply. If it helps, have last month’s ad report handy.</p>`;
+const failMsg = 'We couldn’t send your request just now. Please try again in a few minutes.';
+---
+<div class="fcard">
+  {BOOKING_URL ? (
+  <>
+  <H id={`${id}-h`}>Pick a time</H>
+  <p class="fsub">Choose a 30-minute slot that suits you. You get a confirmation right away.</p>
+  <a class="btn btn-p book-btn" href={BOOKING_URL} target="_blank" rel="noopener">Pick a time<span class="sr"> (opens Google Calendar in a new tab)</span></a>
+  <p class="fine">Booking opens in Google Calendar, in a new tab. {hc && 'Please don’t include any patient details in the booking notes. '}See our <a href="/privacy-policy">privacy policy</a>.</p>
+  </>
+  ) : (
+  <>
+  <H id={`${id}-h`}>{title}</H>
+  {!sent && <p class="fsub">Two required fields. A partner reads every request.</p>}
+  {sent ? <div class="done" role="status" set:html={done} /> : (
+  <form data-am data-done={`${id}-done`} method="POST" action={action} novalidate aria-labelledby={`${id}-h`}>
+    <input type="hidden" name="page" value={page}>
+    <div class="field"><label for={`${id}-name`}>Name <span class="optl">(required)</span></label>
+      <input id={`${id}-name`} name="name" type="text" autocomplete="name" required data-req="Enter your name." aria-describedby={`${id}-name-e`} value={values.name} aria-invalid={errors.name ? 'true' : undefined}><p class="ferr" id={`${id}-name-e`}>{errors.name && 'Enter your name.'}</p></div>
+    <div class="field"><label for={`${id}-email`}>Work email <span class="optl">(required)</span></label>
+      <input id={`${id}-email`} name="email" type="email" inputmode="email" autocomplete="email" required data-req="Enter your work email." aria-describedby={`${id}-email-e`} value={values.email} aria-invalid={errors.email ? 'true' : undefined}><p class="ferr" id={`${id}-email-e`}>{errors.email && emailErr}</p></div>
+    <div class="field"><label for={`${id}-co`}>{hc ? 'Practice or group & website' : 'Company & website'} <span class="optl">(optional)</span></label>
+      <input id={`${id}-co`} name="company" type="text" autocomplete="organization" value={values.company}></div>
+    <fieldset class="field"><legend>How would you like to meet? <span class="optl">(optional)</span></legend>
+      <div class="radios"><label class="radio"><input type="radio" name="format" value="Video" checked={!inPerson}> Video</label><label class="radio"><input type="radio" name="format" value="In person" checked={inPerson}> In person</label></div></fieldset>
+    <div class="field"><label for={`${id}-msg`}>What decision are you weighing? <span class="optl">(optional)</span></label>
+      <textarea id={`${id}-msg`} name="message" rows="3" aria-describedby={`${id}-msg-h`}>{values.message}</textarea></div>
+    <p class="note" id={`${id}-msg-h`}><Fragment set:html={I.shield} /><span>{hc ? 'No patient data is needed or accepted on this form. Please don’t include names, dates of birth, conditions, or any other patient details.' : 'Healthcare provider? Please don’t include any patient details. None are needed to get started.'}</span></p>
+    <div class="hp" aria-hidden="true"><label for={`${id}-web`}>Leave this empty</label><input id={`${id}-web`} name="am_trap" type="text" tabindex="-1" autocomplete="off"></div>
+    <button class="btn btn-p" type="submit">Send request</button>
+    <p class="ferr" data-fail role="alert">{failed && failMsg}</p>
+    <p class="fine">We use your details only to reply. See our <a href="/privacy-policy">privacy policy</a>.</p>
+  </form>
+  )}
+  <template id={`${id}-done`} set:html={done} />
+  <template id={`${id}-fail`} set:html={failMsg} />
+  </>
+  )}
+</div>

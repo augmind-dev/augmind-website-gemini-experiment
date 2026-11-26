@@ -1,0 +1,43 @@
+---
+/**
+ * /scheduling: the consultation form on its own page. It is also where the homepage and healthcare forms post when
+ * script is off: rendered on demand, it reads the `consult` Action result and shows the confirmation, the field
+ * errors (keeping what was typed), or the failure message with the email fallback. Old /free-consultation and
+ * /discover-quote links redirect here (vercel.json).
+ */
+export const prerender = false;
+
+import Base from '../layouts/Base.astro';
+import ConsultForm from '../components/ConsultForm.astro';
+import { actions, isInputError } from 'astro:actions';
+import { tick } from '../lib/icons';
+import { BOOKING_URL } from '../data/site';
+
+// With the booking link on there is no form, so a stray POST of the old form is ignored.
+const result = BOOKING_URL ? undefined : Astro.getActionResult(actions.consult);
+const sent = Boolean(result && !result.error);
+const fields = result?.error && isInputError(result.error) ? result.error.fields : {};
+const errors: Record<string, string | undefined> = Object.fromEntries(Object.entries(fields).map(([k, v]) => [k, (v as string[] | undefined)?.[0]]));
+const failed = Boolean(result?.error && !isInputError(result.error));
+const hc = Astro.url.searchParams.get('for') === 'healthcare';
+
+let values: Record<string, string> = {};
+if (result?.error && Astro.request.method === 'POST') {
+  try {
+    const fd = await Astro.request.clone().formData();
+    values = Object.fromEntries([...fd.entries()].map(([k, v]) => [k, String(v)]));
+  } catch { /* already consumed; start blank */ }
+}
+const pts = ['30 minutes, by video or in person', 'We’ll tell you plainly if Discover isn’t worth it for you', 'Nothing to install, nothing changed in your accounts'];
+---
+<Base title={sent ? 'Request received | AugMind' : 'Request a consultation | AugMind'} canon="scheduling"
+  description="Request a first conversation with an AugMind partner, by video or in person.">
+<section class="sec bg-slate" id="consult" aria-labelledby="consult-h" data-form-zone><div class="w consult">
+  <div class="consult-t">
+    <h1 class="h1" id="consult-h">Talk to a partner about your ad spend.</h1>
+    <p>Pick a time to talk with a partner. Bring last month’s ad report.</p>
+    <ul class="pts">{pts.map((p) => <li><Fragment set:html={tick} />{p}</li>)}</ul>
+  </div>
+  <ConsultForm id="s" level={2} hc={hc || values.page === 'Healthcare'} page={values.page === 'Home' || values.page === 'Healthcare' || values.page === 'AI search' ? values.page : 'Scheduling'} values={values} errors={errors} failed={failed} sent={sent} />
+</div></section>
+</Base>
